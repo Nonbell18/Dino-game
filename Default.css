@@ -1,0 +1,47 @@
+#game {
+  margin: 30vh 0;
+  width: auto;
+  height: 200px;
+  border: 1px solid black;
+  position: relative;
+  overflow: hidden;
+}
+#runner {
+  width: 20px;
+  height: 50px;
+  background-color: red;
+  position: absolute;
+  bottom: 0px;
+}
+
+.jump {
+  animation: jump 0.5s 2 alternate;
+}
+
+@keyframes jump {
+  0% {
+    bottom: 0;
+  }
+  100% {
+    bottom: 50px;
+  }
+}
+
+#obstacle {
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  animation: MoveObstacle 3s linear;
+}
+
+@keyframes MoveObstacle {
+  0% {
+    right: -2vw;
+  }
+  100% {
+    right: 100vw;
+  }
+}
