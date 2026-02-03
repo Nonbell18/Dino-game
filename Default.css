@@ -12,10 +12,11 @@
   background-color: red;
   position: absolute;
   bottom: 0px;
+  translate: 50px;
 }
 
 .jump {
-  animation: jump 0.5s 2 alternate;
+  animation: jump 0.3s 2 alternate;
 }
 
 @keyframes jump {
@@ -27,19 +28,23 @@
   }
 }
 
-#obstacle {
+/* Starts running the game */
+.obstacle {
   width: 20px;
   height: 20px;
   background-color: blue;
   position: absolute;
   bottom: 0px;
   right: 0px;
+}
+
+.obstacleMove {
   animation: MoveObstacle 3s linear;
 }
 
 @keyframes MoveObstacle {
   0% {
-    right: -2vw;
+    right: -20vw;
   }
   100% {
     right: 100vw;
