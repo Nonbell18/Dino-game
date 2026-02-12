@@ -6,11 +6,27 @@
     <title>Dino Game</title>
     <link rel="stylesheet" href="Default.css" />
   </head>
+
   <body>
     <div id="game">
-      <div id="runner"></div>
+      <div id="stats">0</div>
+      <div id="runner-wrapper">
+        <div id="runner"></div>
+      </div>
       <div class="obstacle"></div>
-      <script src="main.js"></script>
+      <div id="game-Over-Screen">
+        <h1>Game Over!</h1>
+        <p>
+          Score: placeholder <br />
+          Time: Placeholder <br /><br />Press SPACE to continue
+        </p>
+      </div>
+      <h1 id="Starting-Text">Press SPACE to start!</h1>
     </div>
+    <p>
+      Controls: <br />space - Jump <br />
+      A and D keys - Movement
+    </p>
+    <script src="main.js"></script>
   </body>
 </html>
