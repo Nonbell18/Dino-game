@@ -10,7 +10,8 @@ let time = 0;
 let lastTime = 0;
 let timeAccumulator = 0;
 let score = 0;
-let duration = 5000; //speed
+let spawnDelay = 500 + Math.random() * 1500;
+let duration = 8000; //speed
 let moveLeft;
 let moveRight;
 let obstacles = [];
@@ -19,45 +20,46 @@ let collision = false;
 let spawner;
 
 //Game running
-function runGame(event) {
-  if (event.code === "Space") {
-    console.log("Space Pressed!");
-    startText.style.display = "none";
-    isGameStarted = true;
-    spawnObstacles();
-    requestAnimationFrame(CollisionCheck);
-    lastTime = performance.now();
-    requestAnimationFrame(Update);
-    Score();
-  }
+function runGame() {
+  startText.style.display = "none";
+  isGameStarted = true;
+  spawnObstacles();
+  requestAnimationFrame(CollisionCheck);
+  lastTime = performance.now();
+  requestAnimationFrame(Update);
+  Score();
 }
 
-/**
- *
- * @param {KeyboardEvent} event
- */
-
 //jumping function
-function SpaceHandler(event) {
-  if (event.code === "Space" && !isJumping && isGameStarted) {
-    isJumping = true;
-    runner.classList.add("jump");
+function SpaceHandler(
+  /**
+   *
+   * @type {KeyboardEvent} event
+   */ event
+) {
+  if (event.code !== "Space") return;
+  {
+    if (collision) {
+      location.reload();
+      return;
+    }
+    if (!isGameStarted) {
+      runGame(event);
+      return;
+    }
+    if (!isJumping) {
+      isJumping = true;
+      runner.classList.add("jump");
 
-    runner.addEventListener(
-      "animationend",
-      () => {
-        runner.classList.remove("jump");
-        isJumping = false;
-      },
-      { once: true }
-    );
-  } else if (collision) {
-    location.reload();
-    return;
-  } else if (!isGameStarted) {
-    runGame(event);
-    isGameStarted = true;
-    return;
+      runner.addEventListener(
+        "animationend",
+        () => {
+          runner.classList.remove("jump");
+          isJumping = false;
+        },
+        { once: true }
+      );
+    }
   }
 }
 
@@ -86,7 +88,10 @@ function Update(timestamp) {
   if (moveRight) {
     RunnerX += 5;
   }
-  runner_wrapper.style.transform = `translate(${RunnerX}px, 0px)`;
+  runner_wrapper.style.transform = `translate(${Math.max(
+    Math.min(RunnerX, window.innerWidth),
+    0
+  )}px, 0px)`;
 
   let DeltaTime = timestamp - lastTime;
   lastTime = timestamp;
@@ -97,8 +102,10 @@ function Update(timestamp) {
     time += 0.1;
     timeAccumulator -= 100;
   }
-
   if (!collision) {
+    score++;
+    CurrentStats.innerHTML =
+      "Score: " + score + " points " + "time: " + time.toFixed(1) + " seconds";
     requestAnimationFrame(Update);
   }
 }
@@ -123,7 +130,7 @@ function spawnObstacles() {
       }, // Slutläge
     ],
     {
-      duration: Math.max(500, duration - time * 0.1), // Tid i millisekunder
+      duration: Math.max(1000, duration - time * 10), // Tid i millisekunder
     }
   );
   animation.onfinish = () => {
@@ -132,7 +139,6 @@ function spawnObstacles() {
   };
 
   if (!collision) {
-    let spawnDelay = 20 + Math.random() * 1500;
     spawner = setTimeout(spawnObstacles, spawnDelay);
   }
 }
@@ -157,16 +163,6 @@ function CollisionCheck() {
   if (!collision) {
     requestAnimationFrame(CollisionCheck);
   }
-}
-
-function Score() {
-  setInterval(() => {
-    if (!collision) {
-      score++;
-    }
-    CurrentStats.innerHTML =
-      "Score: " + score + " points " + "time: " + time.toFixed(1) + " seconds";
-  }, 10);
 }
 
 function EndGame() {
